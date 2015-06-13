@@ -7,6 +7,10 @@ import Control.Monad
 import Database.PostgreSQL.Simple
 import Database.PostgreSQL.Simple.FromRow
 
+user = "jleakakos"
+database = "pet_store"
+password = ""
+
 hello :: IO Int
 hello = do
   conn <- connectPostgreSQL ""
@@ -23,9 +27,9 @@ instance FromRow Product where
 createProductsTable :: IO ()
 createProductsTable = do
   conn <- connect defaultConnectInfo { 
-    connectPassword = "",
-    connectDatabase = "pet_store",
-    connectUser = "jleakakos"
+    connectPassword = password, 
+    connectDatabase = database,
+    connectUser = user
     }
   execute_ conn "create table products (name text, price int)"
   return ()
@@ -33,9 +37,9 @@ createProductsTable = do
 insertProduct :: Product -> IO ()
 insertProduct (Product name price) = do
   conn <- connect defaultConnectInfo { 
-    connectPassword = "",
-    connectDatabase = "pet_store",
-    connectUser = "jleakakos"
+    connectPassword = password,
+    connectDatabase = database,
+    connectUser = user
     }
   execute conn "insert into products values (?, ?)" (name, price)
   return ()
@@ -46,9 +50,9 @@ insertProductFromData name price = insertProduct (Product name price)
 products :: IO [Product]
 products = do
   conn <- connect defaultConnectInfo { 
-    connectPassword = "",
-    connectDatabase = "pet_store",
-    connectUser = "jleakakos"
+    connectPassword = password,
+    connectDatabase = database,
+    connectUser = user
     }
   query_ conn "select name, price from products" :: IO [Product]
   
